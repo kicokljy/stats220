@@ -1,12 +1,15 @@
-# stats220
+# STATS220
 
 <h1>This is my repo for STATS 220.</h1>
 
 _A little about me:_
 
-* I am undertaking a degree in a Bachelor of Science in Psychology
-* I am taking STATS 220 because I am interested in statistics and would like to build my data analysis skills.
-* I am interested in learning about how data can be used to better understand human behaviour and psychological research.
+<ol>
+  <li>I am undertaking a degree in a <em><strong> Bachelor of Science in Psychology.</strong></em></li>
+  <li>I am taking STATS 220 because I am interested in <em><strong>statistics and would like to build my data analysis skills.</strong></em></li>
+  <li>I am interested in learning about how data can be used better to <em><strong>understand human behaviour and psychological research.</strong></em></li>
+</ol> 
 
-<h1>A meme that captures how I currently feel about my university studies is<h1>
-<img src="https://pin.it/3ksXLwAjg"/>
+<strong>A meme that captures how I currently feel about my university studies is</strong>
+https://nz.pinterest.com/pin/65443000825622393/
+![trying hard to study](/assets/images/sleepy dog.jpg "sleepy")
