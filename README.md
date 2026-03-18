@@ -11,5 +11,4 @@ _A little about me:_
 </ol> 
 
 <strong>A meme that captures how I currently feel about my university studies is</strong>
-https://nz.pinterest.com/pin/65443000825622393/
-![trying hard to study](/assets/images/sleepy dog.jpg "sleepy")
+<img src="sleepy dog.jpg" alt="Trying hard to study!!!">
