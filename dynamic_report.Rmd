@@ -11,7 +11,6 @@ knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, error=FALSE)
 ```
 
 ```{css}
-<style>
 body {font-family: Arial, sans-serif;
   margin: 50px;
   line-height: 1.6;
@@ -19,7 +18,7 @@ body {font-family: Arial, sans-serif;
   
   
 h2 {color: #FFC0CB;}
-p {font-size: 16px;}</style>
+p {font-size: 16px;}
 ```
 
 ## Introduction:
