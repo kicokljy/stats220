@@ -1,7 +1,5 @@
 ---
-title: "Project 2"
-author: "Kico Li"
-subtitle: "STATS 220 Semester One, 2026"
+title: My dynamic report
 output: html_fragment
 ---
 
@@ -11,53 +9,95 @@ knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, error=FALSE)
 ```
 
 ```{css}
-body {font-family: Arial, sans-serif;
-  margin: 50px;
-  line-height: 1.6;
-  background-color: #89CFF0;}
-  
-  
-h2 {color: #FFC0CB;}
-p {font-size: 16px;}
+.dynamic-comment {background-color: #FFEEFF;
+  padding: 12px;
+  border-radius: 8px;}
 ```
 
-## Introduction:
+# Tracking Instagram Ads in My Feed
 
-My project focused on observing Instagram ads over a period of one week. Each time I saw an ad, I recorded information about it using a Google Form. I also involved my family members to help collect more observations, which allowed me to gather a larger dataset over a short period of time.
+```{r}
+library(tidyverse)
+csv_file <- "https://docs.google.com/spreadsheets/d/e/2PACX-1vTAPHXsVQfubHC3wws5HW69hadD5WhRB23Igz7jG6yNAjk4KAX9Pg8frUER8GmZRaQ7Q4nNM8wYPPMU/pub?gid=1004960971&single=true&output=csv"
 
-One guideline I considered when designing the form was using clear and suitable question types. I tried to make the questions straightforward and easy to answer so that responses would be more consistent. For example, I used multiple choice questions for ad category and ad format, because these are easier to answer quickly and also easier to analyse later. I also included a numeric question asking how interested the viewer was in the ad, using a scale from 1 to 5.
+logged_data <- read_csv(csv_file)
 
-The data collected allowed me to learn about patterns in the ads that appeared. In particular, I was interested in analysing what categories of ads appeared most often and whether people interacted with them. These variables were useful because they helped show both the content of the ads and how viewers responded to them. Since the dataset included both categorical and numeric data, it gave me several options for analysis, but I decided that ad category and interaction were the most meaningful to present in my final dynamic report.
-
-Google Form link: [https://docs.google.com/forms/d/e/1FAIpQLSd6vnDA8vbODqKaYY_YfaCqaSAH1U6D9msohWUP9mLpn8si-Q/viewform?usp=dialog]
-
-
-## Dynamic report:
-My published dynamic report is available here: []
-
-## Creativity:
-
-I think my project shows creativity in the way I chose my topic and presented the final report. Instead of choosing a very basic topic, I decided to observe Instagram ads, which is something I see often in daily life and could record many times over a week. I also asked my family to help with the survey responses, which helped me collect more data and made the dataset a bit broader.
-
-When designing the form, I tried to base the questions on the kinds of ads people normally see, such as fashion, beauty, or entertainment. I also added a rating question to show how interested the viewer was in each ad. I think this made the data more interesting because it included both categories and numbers, which gave me more to explore in R.
-
-For the dynamic report, I tried to make it look clear and easy to read instead of just showing plain graphs. I used simple CSS styling, clearer chart titles, and short comments to explain what the data was showing. I also liked that the report updates when new data is added, because that made it feel more interactive and useful rather than just a static report.
-
-## Learning reflection:
-
-One of the main things that I have learned from Module 2 is how a dynamic report can update automatically when new data is added. Before doing this project, I did not really understand how Google Forms, Google Sheets, R, and GitHub Pages could all work together. After going through the process myself, I now have a much better understanding of how data can move from collection to analysis and then into a report that updates over time.
-
-I also learned more about using R to explore data and present it in a clear way. Working on this project helped me practice using summary values and bar charts to show patterns in the data. It also made me think more carefully about choosing the most useful variables to focus on, rather than just including everything.
-
-In the future, I would like to learn more about other kinds of data technology, especially things like interactive dashboards or more visualisations. I think it would be interesting to make reports that allow others to interact with the data instead of just viewing static charts
-
-I completed this project individually. To keep improving my group work skills, I will try to be more active in future group projects and get better at sharing ideas and communicating with others.
-
-## Appendix:
-```{r file='exploration.R', eval=FALSE, echo=TRUE}
-
+latest_data <- logged_data %>%
+  rename(timestamp = 1, 
+         rate_of_interest = 2, 
+         ad_category = 3, 
+         ad_format = 4,
+         brand_repeat = 5,
+         interaction = 6) %>%
+  mutate(rate_of_interest = as.numeric(rate_of_interest), 
+         brand_repeat = as.numeric(brand_repeat))
 ```
-```{r file='dynamic_report.Rmd', eval=FALSE, echo=TRUE}
+## Summary Values:
 
+```{r}
+average_interest <- mean(latest_data$rate_of_interest, na.rm = TRUE)
+max_brand_repeat <- max(latest_data$brand_repeat, na.rm = TRUE)
+yes_interaction <- latest_data %>%
+  filter(interaction == "Yes") %>%
+  nrow()
 ```
 
+::: dynamic-comment
+So far, `r nrow(latest_data)` ads have been logged in this dataset.
+`r yes_interaction` of these ads involved interaction from the viewer.
+
+The average interest rating was `r round(average_interest, 1)` out of 5.
+The highest number of times the same brand appeared in one day was `r max_brand_repeat`.
+:::
+
+The chart below shows the number of ads in each category. 
+
+```{r}
+ggplot(latest_data, aes(x = ad_category)) +
+  geom_bar(fill = "#FFC0CB") +
+  labs(title = "Number of Ads by Category",
+    x = "Ad category",
+    y = "Count") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+```{r}
+top_category <- latest_data %>%
+  count(ad_category, sort = TRUE) %>%
+  slice(1) %>%
+  pull(ad_category)
+
+top_category_count <- latest_data %>%
+  count(ad_category, sort = TRUE) %>%
+  slice(1) %>%
+  pull(n)
+
+```
+::: dynamic-comment
+The most common ad category in this dataset was **`r top_category`**, with `r top_category_count` ads recorded.
+:::
+
+The chart shows whether viewers interacted with the ads they saw.
+
+```{r}
+ggplot(latest_data, aes(x = interaction)) +
+  geom_bar(fill = "#89CFF0") +
+  labs(title = "Number of Ads by Interaction",
+    x = "Interaction with ad",
+    y = "Count") +
+  theme_minimal()
+
+```
+```{r}
+yes_interaction <- latest_data %>%
+  filter(interaction == "Yes") %>%
+  nrow()
+
+no_interaction <- latest_data %>%
+  filter(interaction == "No") %>%
+  nrow()
+```
+::: dynamic-comment
+Out of all logged ads, `r yes_interaction` involved interaction, while `r no_interaction` did not.
+:::
